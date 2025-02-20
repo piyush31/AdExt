@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Google Ad Redirect Extractor",
+  "version": "1.0",
+  "description": "Opens a new tab with the adurl from googleadservices.com links.",
+  "permissions": [
+    "webRequest", "tabs"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "*://*.googleadservices.com/*"
+  ],
+  "action": {
+    "default_title": "Ad Redirect Extractor"
+  }
+}
