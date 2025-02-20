@@ -1,5 +1,5 @@
-function trackFreeUrl (url) {
-  const url = new URL(tab.pendingUrl);
+function trackFreeUrl(tabUrl) {
+  const url = new URL(tabUrl);
   // Define a mapping of domains to their respective extraction parameters
   const domainMap = new Map([
     ["googleadservices.com", (url) => url.searchParams.get("adurl")],
@@ -39,37 +39,18 @@ chrome.webRequest.onBeforeRequest.addListener(
     }
 
     const url = new URL(urlString); // Parse the URL
-    const domain = "googleadservices.com";
 
-    // Check if the URL belongs to the target domain
-    if (url.hostname.includes(domain)) {
-      console.log("URL is from googleadservices.com:", url);
-  
-      const adurl = trackFreeUrl(url); // Extract the final url destination without tracking
-      if (false) {
-        console.log("Extracted adurl:", adurl);
-        // Open a new tab with the decoded 'adurl'
-        chrome.tabs.create({ url: adurl }, () => {
-          console.log("Opened a new tab with:", adurl);
-        });
-      } else {
-        console.log("No 'adurl' parameter found in the URL");
-      }
-
-      if (adurl) {
-        console.log("trackFreeUrl adurl:", adurl);
-        // Get the current active tab and update its URL
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-          if (tabs[0]) {
-            chrome.tabs.update(tabs[0].id, { url: adurl });
-          } else {
-            console.error("No active tab found to update.");
-          }
-        });
-      }
+    const adurl = trackFreeUrl(url); // Extract the final url destination without tracking
+    if (adurl != null) {
+      console.log("Extracted adurl:", adurl);
+      // Open a new tab with the decoded 'adurl'
+      chrome.tabs.update(details.tabId, { url: adurl }, () => {
+        console.log("Opened a new tab with:", adurl);
+      });
+    } else {
+      console.log("No 'adurl' parameter found in the URL");
     }
   },
   { urls: ["<all_urls>"] }, // Monitor all outgoing requests
   [] // No extraInfoSpec needed
 );
-
