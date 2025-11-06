@@ -11,7 +11,8 @@
   },
   "host_permissions": [
     "*://*.googleadservices.com/*",
-    "*://ad.doubleclick.net/*"
+    "*://ad.doubleclick.net/*",
+    "*://*.rediff.com/*"
   ],
   "action": {
     "default_title": "Ad Redirect Extractor"
